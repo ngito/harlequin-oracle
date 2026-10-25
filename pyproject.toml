@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "harlequin-oracle"
+version = "0.1.2"
+description = "Oracle database adapter for Harlequin with hierarchical catalog"
+requires-python = ">=3.8"
+dependencies = [
+    "harlequin>=2.0",
+    "oracledb",
+]
+
+[project.entry-points."harlequin.adapter"]
+oracle = "harlequin_oracle:OracleHarlequinAdapter"
+
+[tool.setuptools.package-dir]
+"" = "src"
