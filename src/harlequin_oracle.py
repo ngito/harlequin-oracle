@@ -24,6 +24,16 @@ from package import OraclePackageCatalogItem, OraclePackageSubProgram
 from index import OracleIndexCatalogItem
 from synonym import OracleSynonymCatalogItem
 from sequence import OracleSequenceCatalogItem
+from catalog_groups import (
+    OracleTableGroupItem,
+    OracleViewGroupItem,
+    OracleFunctionGroupItem,
+    OracleProcedureGroupItem,
+    OracleIndexGroupItem,
+    OracleSynonymGroupItem,
+    OracleSequenceGroupItem,
+    OraclePackageGroupItem,
+)
 
 # Configure INTERACTIONS after everything is loaded
 import interactions

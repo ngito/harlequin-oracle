@@ -37,77 +37,102 @@ class OracleSchemaCatalogItem(InteractiveCatalogItem["OracleHarlequinConnection"
     def fetch_children(self) -> list[CatalogItem]:
         if self.connection is None:
             return []
-        from table import OracleTableCatalogItem
-        from view import OracleViewCatalogItem
-        from index import OracleIndexCatalogItem
-        from synonym import OracleSynonymCatalogItem
-        from sequence import OracleSequenceCatalogItem
+        from catalog_groups import (
+            OracleTableGroupItem,
+            OracleViewGroupItem,
+            OracleFunctionGroupItem,
+            OracleProcedureGroupItem,
+            OracleIndexGroupItem,
+            OracleSynonymGroupItem,
+            OracleSequenceGroupItem,
+            OraclePackageGroupItem,
+        )
 
-        conn = self.connection.conn
-        cur = conn.cursor()
         children: list[CatalogItem] = []
 
         try:
+            # Check if tables exist before adding the group
             try:
-                for row in cur.execute(
-                    "SELECT table_name FROM user_tables ORDER BY table_name"
-                ).fetchall():
-                    children.append(
-                        OracleTableCatalogItem.from_schema(
-                            self, row[0], "TABLE", self.connection
-                        )
-                    )
+                conn = self.connection.conn
+                cur = conn.cursor()
+                cur.execute("SELECT COUNT(*) FROM user_tables")
+                if cur.fetchone()[0] > 0:
+                    children.append(OracleTableGroupItem(parent=self, connection=self.connection))
+                cur.close()
             except Exception:
                 pass
 
             try:
-                for row in cur.execute(
-                    "SELECT view_name FROM user_views ORDER BY view_name"
-                ).fetchall():
-                    children.append(
-                        OracleViewCatalogItem.from_schema(
-                            self, row[0], "VIEW", self.connection
-                        )
-                    )
+                conn = self.connection.conn
+                cur = conn.cursor()
+                cur.execute("SELECT COUNT(*) FROM user_views")
+                if cur.fetchone()[0] > 0:
+                    children.append(OracleViewGroupItem(parent=self, connection=self.connection))
+                cur.close()
             except Exception:
                 pass
 
             try:
-                for row in cur.execute(
-                    "SELECT index_name FROM user_indexes ORDER BY index_name"
-                ).fetchall():
-                    children.append(
-                        OracleIndexCatalogItem.from_schema(
-                            self, row[0], self.connection
-                        )
-                    )
+                conn = self.connection.conn
+                cur = conn.cursor()
+                cur.execute("SELECT COUNT(*) FROM user_objects WHERE object_type = 'FUNCTION'")
+                if cur.fetchone()[0] > 0:
+                    children.append(OracleFunctionGroupItem(parent=self, connection=self.connection))
+                cur.close()
             except Exception:
                 pass
 
             try:
-                for row in cur.execute(
-                    "SELECT synonym_name FROM user_synonyms ORDER BY synonym_name"
-                ).fetchall():
-                    children.append(
-                        OracleSynonymCatalogItem.from_schema(
-                            self, row[0], self.connection
-                        )
-                    )
+                conn = self.connection.conn
+                cur = conn.cursor()
+                cur.execute("SELECT COUNT(*) FROM user_objects WHERE object_type = 'PROCEDURE'")
+                if cur.fetchone()[0] > 0:
+                    children.append(OracleProcedureGroupItem(parent=self, connection=self.connection))
+                cur.close()
             except Exception:
                 pass
 
             try:
-                for row in cur.execute(
-                    "SELECT sequence_name FROM user_sequences ORDER BY sequence_name"
-                ).fetchall():
-                    children.append(
-                        OracleSequenceCatalogItem.from_schema(
-                            self, row[0], self.connection
-                        )
-                    )
+                conn = self.connection.conn
+                cur = conn.cursor()
+                cur.execute("SELECT COUNT(*) FROM user_indexes")
+                if cur.fetchone()[0] > 0:
+                    children.append(OracleIndexGroupItem(parent=self, connection=self.connection))
+                cur.close()
             except Exception:
                 pass
-        finally:
-            cur.close()
+
+            try:
+                conn = self.connection.conn
+                cur = conn.cursor()
+                cur.execute("SELECT COUNT(*) FROM user_synonyms")
+                if cur.fetchone()[0] > 0:
+                    children.append(OracleSynonymGroupItem(parent=self, connection=self.connection))
+                cur.close()
+            except Exception:
+                pass
+
+            try:
+                conn = self.connection.conn
+                cur = conn.cursor()
+                cur.execute("SELECT COUNT(*) FROM user_sequences")
+                if cur.fetchone()[0] > 0:
+                    children.append(OracleSequenceGroupItem(parent=self, connection=self.connection))
+                cur.close()
+            except Exception:
+                pass
+
+            try:
+                conn = self.connection.conn
+                cur = conn.cursor()
+                cur.execute("SELECT COUNT(*) FROM user_objects WHERE object_type = 'PACKAGE'")
+                if cur.fetchone()[0] > 0:
+                    children.append(OraclePackageGroupItem(parent=self, connection=self.connection))
+                cur.close()
+            except Exception:
+                pass
+
+        except Exception:
+            pass
 
         return children
