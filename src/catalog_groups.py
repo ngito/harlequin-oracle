@@ -13,8 +13,10 @@ if TYPE_CHECKING:
 @dataclass
 class OracleTableGroupItem(InteractiveCatalogItem["OracleHarlequinConnection"]):
     """Group item for tables under a schema."""
-    label = "Tables"
-    type_label = "t"
+    qualified_identifier: str = "Tables"
+    query_name: str = "Tables"
+    label: str = "Tables"
+    type_label: str = "t"
     type_name: str | None = None
     INTERACTIONS = None
     parent: "OracleSchemaCatalogItem" | None = None
@@ -45,8 +47,10 @@ class OracleTableGroupItem(InteractiveCatalogItem["OracleHarlequinConnection"]):
 @dataclass
 class OracleViewGroupItem(InteractiveCatalogItem["OracleHarlequinConnection"]):
     """Group item for views under a schema."""
-    label = "Views"
-    type_label = "v"
+    qualified_identifier: str = "Views"
+    query_name: str = "Views"
+    label: str = "Views"
+    type_label: str = "v"
     type_name: str | None = None
     INTERACTIONS = None
     parent: "OracleSchemaCatalogItem" | None = None
@@ -77,8 +81,10 @@ class OracleViewGroupItem(InteractiveCatalogItem["OracleHarlequinConnection"]):
 @dataclass
 class OracleFunctionGroupItem(InteractiveCatalogItem["OracleHarlequinConnection"]):
     """Group item for functions under a schema."""
-    label = "Functions"
-    type_label = "fn"
+    qualified_identifier: str = "Functions"
+    query_name: str = "Functions"
+    label: str = "Functions"
+    type_label: str = "fn"
     type_name: str | None = None
     INTERACTIONS = None
     parent: "OracleSchemaCatalogItem" | None = None
@@ -110,8 +116,10 @@ class OracleFunctionGroupItem(InteractiveCatalogItem["OracleHarlequinConnection"
 @dataclass
 class OracleProcedureGroupItem(InteractiveCatalogItem["OracleHarlequinConnection"]):
     """Group item for standalone procedures under a schema."""
-    label = "Procedures"
-    type_label = "pr"
+    qualified_identifier: str = "Procedures"
+    query_name: str = "Procedures"
+    label: str = "Procedures"
+    type_label: str = "pr"
     type_name: str | None = None
     INTERACTIONS = None
     parent: "OracleSchemaCatalogItem" | None = None
@@ -143,8 +151,10 @@ class OracleProcedureGroupItem(InteractiveCatalogItem["OracleHarlequinConnection
 @dataclass
 class OracleIndexGroupItem(InteractiveCatalogItem["OracleHarlequinConnection"]):
     """Group item for indexes under a schema."""
-    label = "Indexes"
-    type_label = "ix"
+    qualified_identifier: str = "Indexes"
+    query_name: str = "Indexes"
+    label: str = "Indexes"
+    type_label: str = "ix"
     type_name: str | None = None
     INTERACTIONS = None
     parent: "OracleSchemaCatalogItem" | None = None
@@ -175,8 +185,10 @@ class OracleIndexGroupItem(InteractiveCatalogItem["OracleHarlequinConnection"]):
 @dataclass
 class OracleSynonymGroupItem(InteractiveCatalogItem["OracleHarlequinConnection"]):
     """Group item for synonyms under a schema."""
-    label = "Synonyms"
-    type_label = "sn"
+    qualified_identifier: str = "Synonyms"
+    query_name: str = "Synonyms"
+    label: str = "Synonyms"
+    type_label: str = "sn"
     type_name: str | None = None
     INTERACTIONS = None
     parent: "OracleSchemaCatalogItem" | None = None
@@ -207,8 +219,10 @@ class OracleSynonymGroupItem(InteractiveCatalogItem["OracleHarlequinConnection"]
 @dataclass
 class OracleSequenceGroupItem(InteractiveCatalogItem["OracleHarlequinConnection"]):
     """Group item for sequences under a schema."""
-    label = "Sequences"
-    type_label = "sq"
+    qualified_identifier: str = "Sequences"
+    query_name: str = "Sequences"
+    label: str = "Sequences"
+    type_label: str = "sq"
     type_name: str | None = None
     INTERACTIONS = None
     parent: "OracleSchemaCatalogItem" | None = None
@@ -239,8 +253,10 @@ class OracleSequenceGroupItem(InteractiveCatalogItem["OracleHarlequinConnection"
 @dataclass
 class OraclePackageGroupItem(InteractiveCatalogItem["OracleHarlequinConnection"]):
     """Group item for packages under a schema."""
-    label = "Packages"
-    type_label = "pk"
+    qualified_identifier: str = "Packages"
+    query_name: str = "Packages"
+    label: str = "Packages"
+    type_label: str = "pk"
     type_name: str | None = None
     INTERACTIONS = None
     parent: "OracleSchemaCatalogItem" | None = None
