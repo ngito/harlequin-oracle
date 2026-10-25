@@ -48,21 +48,40 @@ def _insert_columns_at_cursor(item, driver) -> None:
 
 
 def _show_select_star(item, driver) -> None:
+    """Execute SELECT * directly and show results in the query results panel."""
+    conn = _get_connection(item)
+    if conn is None:
+        driver.notify("No connection available", severity="error")
+        return
     label = _get_label(item)
-    driver.insert_text_at_selection(
-        text=f'SELECT * FROM "{label}" WHERE rownum <= 100'
-    )
+    # Build fully qualified name: schema.table or just table
+    parents = getattr(item, 'parents', ())
+    if parents:
+        qualified_name = f'"{parents[0]}".{item.query_name}'
+    else:
+        qualified_name = item.query_name
+    query = f'SELECT * FROM {qualified_name} WHERE rownum <= 100'
+    driver.run_query(query, title=f"Preview: {label}")
 
 
 def _show_describe(item, driver) -> None:
+    """Execute DESCRIBE query and show results in the query results panel."""
+    conn = _get_connection(item)
+    if conn is None:
+        driver.notify("No connection available", severity="error")
+        return
     label = _get_label(item)
-    driver.insert_text_at_selection(
-        text=(
-            f"SELECT column_name, data_type, nullable, data_length, "
-            f"data_precision, data_scale FROM user_tab_columns "
-            f"WHERE table_name = '{label}' ORDER BY column_id"
-        )
+    parents = getattr(item, 'parents', ())
+    if parents:
+        qualified_name = f'"{parents[0]}".{item.query_name}'
+    else:
+        qualified_name = item.query_name
+    query = (
+        f"SELECT column_name, data_type, nullable, data_length, "
+        f"data_precision, data_scale FROM user_tab_columns "
+        f"WHERE table_name = '{label}' ORDER BY column_id"
     )
+    driver.run_query(query, title=f"Describe: {label}")
 
 
 def _show_ddl(item, driver) -> None:
@@ -155,16 +174,15 @@ def _count_rows(item, driver) -> None:
     label = _get_label(item)
     conn = _get_connection(item)
     if conn is None:
+        driver.notify("No connection available", severity="error")
         return
-    cur = conn.conn.cursor()
-    try:
-        row = cur.execute(f"SELECT COUNT(*) FROM \"{label}\"").fetchone()
-        count = row[0] if row else 0
-        driver.notify(f"Row count for {label}: {count:,}", severity="information")
-    except Exception as e:
-        driver.notify(str(e), severity="error")
-    finally:
-        cur.close()
+    parents = getattr(item, 'parents', ())
+    if parents:
+        qualified_name = f'"{parents[0]}".{item.query_name}'
+    else:
+        qualified_name = item.query_name
+    query = f"SELECT COUNT(*) FROM {qualified_name}"
+    driver.run_query(query, title=f"Count: {label}")
 
 
 # ---------------------------------------------------------------------------
@@ -172,21 +190,14 @@ def _count_rows(item, driver) -> None:
 # ---------------------------------------------------------------------------
 
 def _show_function_preview(item, driver) -> None:
-    """Run the function with default params and show result."""
+    """Run the function and show result in the query results panel."""
     label = _get_label(item)
     conn = _get_connection(item)
     if conn is None:
+        driver.notify("No connection available", severity="error")
         return
-    cur = conn.conn.cursor()
-    try:
-        cur.execute(f'SELECT "{label}" FROM DUAL')
-        row = cur.fetchone()
-        result = row[0] if row else "(null)"
-        driver.notify(f"{label}() = {result}", severity="information")
-    except Exception as e:
-        driver.notify(str(e), severity="error")
-    finally:
-        cur.close()
+    query = f'SELECT "{label}" FROM DUAL'
+    driver.run_query(query, title=f"Preview: {label}")
 
 
 # ---------------------------------------------------------------------------
@@ -197,17 +208,10 @@ def _get_sequence_nextval(item, driver) -> None:
     label = _get_label(item)
     conn = _get_connection(item)
     if conn is None:
+        driver.notify("No connection available", severity="error")
         return
-    cur = conn.conn.cursor()
-    try:
-        cur.execute(f'SELECT "{label}".NEXTVAL FROM DUAL')
-        row = cur.fetchone()
-        nextval = row[0] if row else 0
-        driver.notify(f"{label}.NEXTVAL = {nextval}", severity="information")
-    except Exception as e:
-        driver.notify(str(e), severity="error")
-    finally:
-        cur.close()
+    query = f'SELECT "{label}".NEXTVAL FROM DUAL'
+    driver.run_query(query, title=f"Next Val: {label}")
 
 
 # ---------------------------------------------------------------------------
