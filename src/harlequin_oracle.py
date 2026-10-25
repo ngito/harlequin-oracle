@@ -1,5 +1,7 @@
 # Re-export everything from the src/ flat layout so that
 # `import harlequin_oracle` still works (entry point compat)
+#
+import tree_bindings  # noqa: F401 - monkey-patches catalog tree navigation
 
 from options import (
     username,
