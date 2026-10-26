@@ -1,6 +1,7 @@
 # Re-export everything from the src/ flat layout so that
 # `import harlequin_oracle` still works (entry point compat)
 #
+import title_patch  # noqa: F401 - monkey-patches panel titles with shortcut hints
 import tree_bindings  # noqa: F401 - monkey-patches catalog tree navigation
 import driver_patch  # noqa: F401 - monkey-patches driver run_query for preview
 
