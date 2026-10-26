@@ -174,6 +174,7 @@ HarlequinTree.on_key = _handle_typeahead
 HarlequinTree._is_group_header = _is_group_header
 HarlequinTree._find_and_cursor_to_label_start = _find_and_cursor_to_label_start
 HarlequinTree._find_first_node_by_label = _find_first_node_by_label
+HarlequinTree._typeahead_buffer = ""
 
 
 def _handle_key_left(self: HarlequinTree, event: events.Key) -> None:
