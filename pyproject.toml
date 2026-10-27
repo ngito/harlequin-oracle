@@ -23,6 +23,9 @@ classifiers = [
     "Topic :: Database",
 ]
 
+[project.scripts]
+osql = "osql:main"
+
 [project.entry-points."harlequin.adapter"]
 oracle = "harlequin_oracle:OracleHarlequinAdapter"
 
