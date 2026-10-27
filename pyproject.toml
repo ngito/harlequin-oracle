@@ -16,7 +16,6 @@ license = {text = "MIT"}
 keywords = ["harlequin", "oracle", "database", "sql", "cli"]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Environment :: Console",
     "Environment :: Console :: Curses (Text Mode)",
