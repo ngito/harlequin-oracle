@@ -23,6 +23,12 @@ from harlequin.transaction_mode import HarlequinTransactionMode
 # Options
 # ---------------------------------------------------------------------------
 
+tns = TextOption(
+    name="tns",
+    description="TNS alias from tnsnames.ora (like sqlplus). Overrides host/port/service_name.",
+    default="",
+)
+
 username = TextOption(
     name="username",
     description="Database username. Use 'os' for OS authentication (like sqlplus /).",
@@ -53,7 +59,7 @@ service_name = TextOption(
     default="pdb1",
 )
 
-ORACLE_OPTIONS = [username, password, host, port, service_name]
+ORACLE_OPTIONS = [tns, username, password, host, port, service_name]
 
 ORACLE_KEYWORDS = [
     "AND", "AS", "BETWEEN", "BY", "CASE", "CREATE", "SELECT", "FROM",
