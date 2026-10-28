@@ -24,11 +24,25 @@ Oracle database adapter for [Harlequin](https://github.com/tconbeer/harlequin) â
 
 ## Install
 
+### System-wide (all users)
+
 ```bash
-pip install harlequin-oracle
+sudo -H python3.11 -m pip install harlequin
+sudo -H python3.11 -m pip install harlequin-oracle
 ```
 
-Requires Python 3.8+ and the Oracle Instant Client libraries.
+System-wide install available to all users.
+
+### Per-user install
+
+```bash
+python3.11 -m pip install --user harlequin
+python3.11 -m pip install --user harlequin-oracle
+```
+
+Installed to `~/.local/bin`, only available to the current user. Ensure `~/.local/bin` is on `$PATH` if `harlequin` isn't found.
+
+Requires Python 3.11 and Oracle Instant Client libraries.
 
 ## Usage
 
